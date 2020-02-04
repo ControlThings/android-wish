@@ -1,0 +1,119 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+
+def getGitVersion = { ->
+    def stdout = new ByteArrayOutputStream()
+
+    exec {
+        commandLine 'git', 'describe', '--abbrev=4', '--always', '--tags'
+        standardOutput = stdout
+    }
+
+
+    return stdout.toString().trim()
+}
+
+def getGitClean = { ->
+
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'status', '--porcelain'
+        standardOutput = stdout
+
+    }
+    if ("${stdout.size()}" > 0) {
+        return "-d"
+    } else {
+        return "-c"
+    }
+}
+
+def libraryGroupId = 'fi.ct.wish'
+def libraryArtifactId = 'WishCore'
+def libraryVersion = '0.6.2'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
+    def git_version = getGitVersion
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 26
+
+        buildConfigField "String", "GitVersion", "\"${git_version}\""
+        buildConfigField "String", "GitClean", "\"${getGitClean()}\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            libraryVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "${libraryArtifactId}-${libraryVersion}.aar"
+                }
+            }
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage','InvalidPackage'
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
+        }
+    }
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            groupId libraryGroupId
+            version libraryVersion
+            artifactId libraryArtifactId
+            artifact("$buildDir/outputs/aar/${artifactId}-${version}.aar")
+
+            //generate pom nodes for dependencies
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.implementation.allDependencies.each { dependency ->
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', dependency.group)
+                    dependencyNode.appendNode('artifactId', dependency.name)
+                    dependencyNode.appendNode('version', dependency.version)
+                }
+            }
+        }
+    }
+}
+
+
+artifactory {
+    contextUrl = 'http://foremost.cto.fi:8081/artifactory'
+    publish {
+        repository {
+            repoKey = 'libs-release-local'
+
+            username = artifactory_username
+            password = artifactory_password
+        }
+        defaults {
+            publications('aar')
+            publishArtifacts = true
+
+            properties = ['qa.level': 'basic', 'q.os': 'android', 'dev.team': 'core']
+            publishPom = true
+        }
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    implementation 'org.mongodb:bson:3.6.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+}

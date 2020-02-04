@@ -1,0 +1,4 @@
+<resources>
+    <string name="notification_title">Wish - Identiteettipohjainen kommunikointitaso</string>
+    <string name="notification_text">Napsauta sulkeaksesi</string>
+</resources>
