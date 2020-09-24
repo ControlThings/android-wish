@@ -4,21 +4,32 @@ This repository is the Wish core port to Android. The port takes form of an Andr
 
 ## Build instructions
 
-$ ./gradlew --refresh-dependencies clean build assembleRelease artifactoryPublish
+### Prerequisites
 
-If you build everything from Android studio, then this just publishes
-the current build to Artifactory:
+The library uses the wish-c99 library as a submodule:
 
-$ ./gradlew artifactoryPublish
+```
+git submodule update --init --recursive
+```
 
-This requires that you have set up your Artifactory access credentials.
-The encrypted passwd is available from Artifactory after logging in. 
-The place to put the credentials is: ~/.gradle/gradle.properties
+As the library includes C code, Android NDK must be installed. You can install it with Android Studio's "SDK Manager", for example. 
 
-artifactory_username=<artifactory user name>
-artifactory_password=<your hashed Artifactory passwd>
+Beware! Currently compiling is only successful with NDK version 16.1.4479499.
 
-Nice to know:
+You must have you environment configured so that Gradle can find the Android SDK. For example, you need to have a `local.properties` file with following contents:
+
+```
+ndk.dir=/home/jan/Android/Sdk/ndk/16.1.4479499
+sdk.dir=/home/jan/Android/Sdk
+```
+
+## Build instructions
+
+```
+./gradlew --refresh-dependencies clean build assembleRelease
+```
+
+## Nice to know:
 
 ./gradlew androidDependencies
 
