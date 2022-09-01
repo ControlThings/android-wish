@@ -30,7 +30,7 @@ def getGitClean = { ->
 }
 
 def libraryGroupId = 'fi.ct.wish'
-def libraryArtifactId = 'WishCore'
+def libraryArtifactId = 'wishcore'
 def libraryVersion = '0.6.2'
 
 android {
@@ -92,7 +92,31 @@ publishing {
     }
 }
 
+def githubProperties = new Properties()
+githubProperties.load(new FileInputStream(rootProject.file("github.properties"))) //Set env variable GPR_USER & GPR_API_KEY if not adding a properties file
 
+publishing {
+  repositories {
+          maven {
+                name = "GitHubPackages"
+          /** Configure path of your package repository on Github
+          ** Replace GITHUB_USERID with your/organisation Github userID       
+          ** and REPOSITORY with the repository name on GitHub
+          */
+  url = uri("https://maven.pkg.github.com/ControlThings/android-wish")
+  credentials {
+          /** Create github.properties in root project folder file with     
+          ** gpr.usr=GITHUB_USER_ID & gpr.key=PERSONAL_ACCESS_TOKEN 
+          ** Set env variable GPR_USER & GPR_API_KEY if not adding a properties file**/
+  
+          username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+          password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+        }
+      }
+    }
+}
+
+/*
 artifactory {
     contextUrl = 'http://foremost.cto.fi:8081/artifactory'
     publish {
@@ -111,6 +135,7 @@ artifactory {
         }
     }
 }
+*/
 
 dependencies {
     testCompile 'junit:junit:4.12'

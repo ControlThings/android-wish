@@ -17,3 +17,4 @@
 app/src/main/jni/nbproject
 app/release
 app/.externalNativeBuild
+/github.properties
