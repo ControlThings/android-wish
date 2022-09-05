@@ -31,7 +31,7 @@ def getGitClean = { ->
 
 def libraryGroupId = 'fi.ct.wish'
 def libraryArtifactId = 'wishcore'
-def libraryVersion = '0.6.2'
+def libraryVersion = getGitVersion()
 
 android {
     compileSdkVersion 26
