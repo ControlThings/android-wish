@@ -23,11 +23,53 @@ ndk.dir=/home/jan/Android/Sdk/ndk/16.1.4479499
 sdk.dir=/home/jan/Android/Sdk
 ```
 
-## Build instructions
+## Actual build
+
+1. Tag the release: 
+
+```
+git tag 0.9.1
+```
+
+2. Assemble the release artifact
+
+```
+./gradlew assembleRelease
+```
+
+NOTE: java-8-openjdk, openjdk version "1.8.0_342", use `sudo  update-alternatives --config java` to select on Ubuntu
+
+A clean build can be done like this:
 
 ```
 ./gradlew --refresh-dependencies clean build assembleRelease
 ```
+
+3. Publish the 'aar' artifact
+
+This publishes to Github packages:
+
+```
+./gradlew publish 
+```
+
+The publishing is defined in `app/build.gradle` and requires that you have Github packages set up.
+
+## Setting up Github packages
+
+Create github.properties in repo root, and add to .gitignore; 
+
+```
+gpr.usr=
+gpr.key=
+```
+
+Then visit this page to get your Github id: https://api.github.com/users/<username> like https://api.github.com/users/janyman
+
+Take "id" field, and insert into `github.properties` as `grp.usr`.
+
+Then create a publishing key for you, by visinting https://github.com/settings/tokens
+Create a token that has "package write" permission, cut&paste into `github.properties` as `grp.key`
 
 ## Nice to know:
 
