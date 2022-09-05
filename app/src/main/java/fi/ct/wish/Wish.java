@@ -15,6 +15,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import static android.app.PendingIntent.FLAG_IMMUTABLE;
 import android.app.RemoteInput;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -69,7 +70,7 @@ public class Wish extends Service {
         IntentFilter filter = new IntentFilter("fi.ct.wish.KILL_WISH");
         registerReceiver(receiver, filter);
         Intent close = new Intent("fi.ct.wish.KILL_WISH");
-        PendingIntent pClose = PendingIntent.getBroadcast(this, 0, close, 0);
+        PendingIntent pClose = PendingIntent.getBroadcast(this, 0, close, FLAG_IMMUTABLE);
 
         /*
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
