@@ -71,6 +71,9 @@ public class Wish extends Service {
 
     @Override
     public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
+        // Adapted from https://medium.com/@chaitanya71998/react-native-update-your-react-native-app-to-target-android-14-api-level-34-or-higher-b94bd043bdd3
+        //Consider using this condition instead: if (Build.VERSION.SDK_INT >= 34 && getApplicationInfo().targetSdkVersion >= 34) {
+        //...after changing compileSdkVersion to 34?
         if (getApplicationInfo().targetSdkVersion >= 34) {
             return super.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
         } else {
