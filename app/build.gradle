@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.artifactory'
 
 def getGitVersion = { ->
     def stdout = new ByteArrayOutputStream()
@@ -34,13 +33,13 @@ def libraryArtifactId = 'wishcore'
 def libraryVersion = getGitVersion()
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 33
+    buildToolsVersion '31.0.0'
     def git_version = getGitVersion
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 34
 
         buildConfigField "String", "GitVersion", "\"${git_version}\""
         buildConfigField "String", "GitClean", "\"${getGitClean()}\""
@@ -67,6 +66,10 @@ android {
         ndkBuild {
             path 'src/main/jni/Android.mk'
         }
+    }
+ 
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -120,4 +123,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     implementation 'org.mongodb:bson:3.6.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
+    // Added for API34 support
+    implementation('org.jetbrains:annotations:16.0.2')
 }

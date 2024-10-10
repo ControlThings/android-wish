@@ -36,6 +36,13 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Build;
+import org.jetbrains.annotations.Nullable;
+import android.content.Context;
+
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;
@@ -60,6 +67,15 @@ public class Wish extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.v(TAG, "in onStartCommand");
         return Service.START_STICKY;
+    }
+
+    @Override
+    public Intent registerReceiver(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
+        if (getApplicationInfo().targetSdkVersion >= 34) {
+            return super.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+        } else {
+            return super.registerReceiver(receiver, filter);
+        }
     }
 
     @Override
