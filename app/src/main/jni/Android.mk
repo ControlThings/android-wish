@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 # Here we give our module name and source file(s)
 
 WISH_MODULES = $(LOCAL_PATH)/wish-c99/deps/mbedtls/library $(LOCAL_PATH)/wish-c99/src $(LOCAL_PATH)/wish-c99/deps/ed25519/src $(LOCAL_PATH)/wish-c99/deps/wish-rpc-c99/src $(LOCAL_PATH)/wish-c99/deps/bson
-WISH_CORE_VERSION_STRING = $(shell cd wish-c99; git describe --abbrev=4 --dirty --always --tags)
+WISH_CORE_VERSION_STRING = $(shell cd $(LOCAL_PATH)/wish-c99; git describe --abbrev=4 --dirty --always --tags)
 
 WISH_SRC := 
 LOCAL_MODULE    := wish
