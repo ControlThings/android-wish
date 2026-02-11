@@ -15,6 +15,7 @@ LOCAL_LDLIBS := -llog
 LOCAL_CFLAGS := -O2 -Wall -Wno-pointer-sign -Werror -fvisibility=hidden -Wno-unused-variable -Wno-unused-function
 LOCAL_CFLAGS += -DWISH_CORE_VERSION_STRING=\"$(WISH_CORE_VERSION_STRING)\"
 LOCAL_CFLAGS += -DRELEASE_BUILD
+LOCAL_CFLAGS += -Wno-unused-but-set-variable -Wno-inline-asm
 #LOCAL_CFLAGS += -flto -fwhole-program #this causes build problem for arm64-v8a
 
 #Put each function in own section, so that linker can discard unused code

@@ -33,13 +33,20 @@ def libraryArtifactId = 'wishcore'
 def libraryVersion = getGitVersion()
 
 android {
-    compileSdkVersion 33
+    namespace 'fi.ct.wish'
+    compileSdkVersion 35
     buildToolsVersion '31.0.0'
+    ndkVersion '28.2.13676358'
     def git_version = getGitVersion
 
+    buildFeatures {
+        buildConfig true
+        aidl true
+    }
+
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 34
+        minSdkVersion 21
+        targetSdkVersion 35
 
         buildConfigField "String", "GitVersion", "\"${git_version}\""
         buildConfigField "String", "GitClean", "\"${getGitClean()}\""
@@ -120,7 +127,7 @@ publishing {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
     implementation 'org.mongodb:bson:3.6.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
     // Added for API34 support

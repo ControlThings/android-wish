@@ -20,7 +20,7 @@ int android_wish_printf(const char *format, ...);
 int android_wish_vprintf(const char *format, va_list arg_list);
 
 int getJNIEnv(JavaVM *vm, JNIEnv **result_env, bool * didAttach);
-int detachThread();
+int detachThread(JavaVM *javaVM);
 
 int enter_WishOsJni_monitor(void);
 
